@@ -11,7 +11,7 @@ const domainGroupId = "22954fc1-0ce0-45d1-a844-cbc8e7dc0df1";
 const App = () => {
   const { addTodo, removeAll, removeCompleted } = useStore();
   const [text, setText] = useState("");
-  const [hasCookieBot, setHasCookieBot] = useState(undefined);
+  const [hasCookieBot, setHasCookieBot] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
