@@ -4,10 +4,14 @@ import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { Button, Container, Flex, Input, MantineProvider } from "@mantine/core";
 import TodosList from "./components/TodosList";
 import useStore from "./store";
+import CookieBot from "react-cookiebot";
+
+const domainGroupId = "22954fc1-0ce0-45d1-a844-cbc8e7dc0df1";
 
 const App = () => {
   const { addTodo, removeAll, removeCompleted } = useStore();
   const [text, setText] = useState("");
+  const [hasCookieBot, setHasCookieBot] = useState(undefined);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -31,38 +35,47 @@ const App = () => {
   };
 
   return (
-    <MantineProvider>
-      <Container fluid style={{ height: "90vh" }}>
-        <Flex
-          align="center"
-          justify="center"
-          direction="column"
-          style={{ height: "100%" }}
-          gap="md"
-        >
-          <Flex gap="md">
-            <Input
-              value={text}
-              onChange={handleChange}
-              onKeyDown={handleEnter}
-              placeholder="Input task text"
-            />
-            <Button onClick={handleAddTodo}>Add todo</Button>
+    <>
+      <CookieBot domainGroupId={domainGroupId} />
+      <button
+        onClick={() => setHasCookieBot(!!document.querySelector("#CookieBot"))}
+      >
+        Проверить Cookiebot
+      </button>
+      {hasCookieBot && <p>CookieBot работает корректно</p>}
+      <MantineProvider>
+        <Container fluid style={{ height: "90vh" }}>
+          <Flex
+            align="center"
+            justify="center"
+            direction="column"
+            style={{ height: "100%" }}
+            gap="md"
+          >
+            <Flex gap="md">
+              <Input
+                value={text}
+                onChange={handleChange}
+                onKeyDown={handleEnter}
+                placeholder="Input task text"
+              />
+              <Button onClick={handleAddTodo}>Add todo</Button>
+            </Flex>
+            <Flex justify="space-between" gap="xl">
+              <Button onClick={removeAll} color="red">
+                Remove all
+              </Button>
+              <Button onClick={removeCompleted} color="red">
+                Remove completed
+              </Button>
+            </Flex>
+            <Flex>
+              <TodosList />
+            </Flex>
           </Flex>
-          <Flex justify="space-between" gap="xl">
-            <Button onClick={removeAll} color="red">
-              Remove all
-            </Button>
-            <Button onClick={removeCompleted} color="red">
-              Remove completed
-            </Button>
-          </Flex>
-          <Flex>
-            <TodosList />
-          </Flex>
-        </Flex>
-      </Container>
-    </MantineProvider>
+        </Container>
+      </MantineProvider>
+    </>
   );
 };
 
